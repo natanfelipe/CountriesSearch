@@ -1,6 +1,7 @@
 package com.br.natanfelipe.teste;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,13 +71,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
 
                         boolean permuted = isPermuted(country,text.toLowerCase());
                         boolean typo = isTypo(country,text.toLowerCase());
-                        if(searchEnd = false) {
-                            if (typo || permuted) {
+                            if (permuted || typo) {
                                 mFilteredList.add(c);
-                                searchEnd = true;
-
-                            } else
-                                searchEnd = false;
                         }
                     }
                 }
@@ -130,6 +126,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
         int count = 0;
         int addTypo = word1.length()+1;
         int removeTypo = word1.length()-1;
+        int diffLength = word2.length() - word1.length();
         if(word1.length() == word2.length()){
             for(int i = 0; i < word1.length(); i++){
                 if(word1.charAt(i) != word2.charAt(i))
@@ -139,21 +136,22 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
                 result = false;
 
         } else {
-            if(word2.length() == addTypo){
-                for(int i = 0; i < word1.length()+1; i++){
-                    if(word1.charAt(i) != word2.charAt(i))
+            if(diffLength == 1 && word2.length() == addTypo){
+                for(int i = 0; i < word1.length(); i++){
+                        if(!(word1.charAt(i) == 0) && word1.charAt(i) != word2.charAt(i))
                         count++;
+
                 }
-                if(count != 1)
+                if(count > 1)
                     result = false;
 
             }
             else if(word2.length() == removeTypo){
-                for(int i = 0; i < word1.length()-1; i++){
+                for(int i = 0; i < removeTypo; i++){
                     if(word1.charAt(i) != word2.charAt(i))
                         count++;
                 }
-                if(count != 1)
+                if(count > 1)
                     result = false;
             } else
                 result = false;
